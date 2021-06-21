@@ -5,7 +5,7 @@
 //
 // ME1 Savegame file format
 // 
-// All the data in these structs is laid out in the order in which data is serialized  the structs are mainly just used as 
+// All the data in these structs is laid out in the order in which data is serialized the structs are mainly just used as 
 // a way of organizing the data, and are not meant to indicate how the data is organized in memory
 // 
 // NOTES:
@@ -17,10 +17,10 @@
 //      - INT UncompressedSize
 // 
 
-typedef byte unsigned char;
-struct String;
-struct Vector;
-struct Rotator;
+typedef unsigned char byte;
+struct String {};
+struct Vector {};
+struct Rotator {};
 
 struct SaveTimeStamp
 {
