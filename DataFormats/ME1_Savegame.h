@@ -5,7 +5,7 @@
 //
 // ME1 Savegame file format
 // 
-// All the data in these structs is laid out in the order in which data is serialized  the structs are mainly just used as 
+// All the data in these structs is laid out in the order in which data is serialized the structs are mainly just used as 
 // a way of organizing the data, and are not meant to indicate how the data is organized in memory
 // 
 // NOTES:
@@ -17,10 +17,10 @@
 //      - INT UncompressedSize
 // 
 
-typedef byte unsigned char;
-struct String;
-struct Vector;
-struct Rotator;
+typedef unsigned char byte;
+struct String {};
+struct Vector {};
+struct Rotator {};
 
 struct SaveTimeStamp
 {
@@ -30,9 +30,91 @@ struct SaveTimeStamp
     int Year;
 };
 
+struct PlotQuestSaveRecord
+{
+    int QuestCounter;
+    int bQuestUpdated;
+    int History[];
+};
+
+struct PlotCodexPageSaveRecord
+{
+    int Page;
+    int bNew;
+};
+
+struct PlotCodexSaveRecord
+{
+    PlotCodexPageSaveRecord Pages[];
+};
+
+struct PlotTableSaveRecord
+{
+    int BoolVariables[];
+    int IntVariables[];
+    float FloatVariables[];
+    int QuestProgressCounter;
+    PlotQuestSaveRecord QuestProgress[];
+    int QuestIds[];
+    PlotCodexSaveRecord CodexEntries[];
+    int CodexIds[];
+};
+
+struct MorphFeatureSaveRecord
+{
+    String Feature;
+    float Offset;
+};
+
+struct OffsetBoneSaveRecord
+{
+    String Name;
+    Vector Offset;
+};
+
+struct ScalarParameterSaveRecord
+{
+    String Name;
+    float Value;
+};
+
+struct LinearColor
+{
+    float R, G, B, A;
+};
+
+struct VectorParameterSaveRecord
+{
+    String Name;
+    LinearColor Value;
+};
+
+struct TextureParameterSaveRecord
+{
+    String Name;
+    String Value;
+};
+
+struct MorphHeadSaveRecord
+{
+    String HairMesh;
+    String AccessoryMeshes[];
+    MorphFeatureSaveRecord MorphFeatures[];
+    OffsetBoneSaveRecord OffsetBones[];
+    Vector Lod0Vertices[];
+    Vector Lod1Vertices[];
+    Vector Lod2Vertices[];
+    Vector Lod3Vertices[];
+    ScalarParameterSaveRecord ScalarParameters[];
+    VectorParameterSaveRecord VectorParameters[];
+    TextureParameterSaveRecord TextureParameters[];
+};
+
 struct AppearanceSaveRecord
 {
     int bHasMorphHead;
+    // Only serialized if bHasMorphHead is true
+    MorphHeadSaveRecord MorphHead;
 };
 
 struct SimpleTalentSaveRecord
@@ -53,6 +135,12 @@ struct ComplexTalentSaveRecord
     int PrereqRanks[];
 };
 
+struct HotKeySaveRecord
+{
+    int HotKeyPawn;
+    int HotKeyEvent;
+};
+
 struct PlayerRecord
 {
     int bIsFemale;
@@ -70,6 +158,45 @@ struct PlayerRecord
     int TalentPoolPoints;
     String MappedTalent;
     AppearanceSaveRecord Appearance;
+    SimpleTalentSaveRecord SimpleTalents[];
+    ComplexTalentSaveRecord ComplexTalents[];    
+    ItemSaveRecord Equipment[];    
+    ItemSaveRecord Weapons[];
+    ItemSaveRecord Items[];
+    ItemSaveRecord BuybackItems[];
+    int Credits;
+    int Medigel;
+    float Grenades;
+    float Omnigel;
+    String FaceCode;
+    int bArmorOverridden;
+    int AutoLevelUpTemplateID;
+    float HealthPerLevel;
+    float StabilityCurrent;
+    byte Race;
+    float ToxicCurrent;
+    int Stamina;
+    int Focus;
+    int Precision;
+    int Coordination;
+    byte AttributePrimary;
+    byte AttributeSecondary;
+    float SkillCharm;
+    float SkillIntimidate;
+    float SkillHaggle;
+    float HealthCurrent;
+    float ShieldCurrent;
+    int XPLevel;
+    int bIsDriving;
+    int GameOptions[];
+    int bHelmetShown;
+    byte CurrentQuickSlot;
+    byte LastQuickSlot;
+    String LastPower;
+    float HealthMax;
+    HotKeySaveRecord HotKeys[];
+    String PrimaryWeapon;
+    String SecondaryWeapon;
 };
 
 struct ItemModSaveRecord
@@ -426,8 +553,11 @@ struct ME1Savegame
     // When was the career created
     SaveTimeStamp CreatedDate;
 
+    PlotTableSaveRecord PlotData;
+
     // When was the savegame created
     SaveTimeStamp TimeStamp;
+    int SecondsPlayed;
 
     PlayerRecord PlayerData;
 
