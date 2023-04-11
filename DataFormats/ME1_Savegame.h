@@ -135,6 +135,12 @@ struct ComplexTalentSaveRecord
     int PrereqRanks[];
 };
 
+struct GameOptionsSaveRecord
+{
+    // There should be 43 elements in the game options array
+    int GameOptions[];
+};
+
 struct HotKeySaveRecord
 {
     int HotKeyPawn;
@@ -188,10 +194,10 @@ struct PlayerRecord
     float ShieldCurrent;
     int XPLevel;
     int bIsDriving;
-    int GameOptions[];
+    GameOptionsSaveRecord GameOptions;
     int bHelmetShown;
     byte CurrentQuickSlot;
-    byte LastQuickSlot;
+    int LastQuickSlot;
     String LastPower;
     float HealthMax;
     HotKeySaveRecord HotKeys[];
@@ -524,13 +530,14 @@ struct LEGACY_WorldSaveRecord : public LEGACY_BaseObjectSaveRecord
 
 struct LEGACY_LevelSaveRecord
 {
-    String Name;
+    String LevelName;
     LEGACY_BaseObjectSaveRecord LevelObjects[];
+    String DestroyedObjects[];
 };
 
 struct LEGACY_MapSaveRecord
 {
-    String Keys[];
+    String MapName;
     LEGACY_LevelSaveRecord LevelData[];
 };
 
